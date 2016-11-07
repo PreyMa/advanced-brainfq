@@ -66,7 +66,7 @@ bool addtosource(char **read, int *const sourcesize, const char cursor)
 int loadbrainfqfl(char ***const code, const char *const flname, int *const funamount)
 {
     char cursor;
-    int sourcesize=0, jmp=0;
+    int sourcesize=0, jmp=0, bytes=0;
     bool infunction=false;
 
     *code= NULL;
@@ -91,6 +91,8 @@ int loadbrainfqfl(char ***const code, const char *const flname, int *const funam
                 if(infunction)                                              //if new function is reached
                 {
                     (*funamount)++;
+                    bytes= bytes+ sourcesize;
+                    sourcesize= 0;
 
                     *code= realloc(*code, (*funamount) * sizeof(uint8_t*)); //allocate new function array
 
@@ -105,14 +107,14 @@ int loadbrainfqfl(char ***const code, const char *const flname, int *const funam
                     }
                 }
 
-                if(!addtosource(code[(*funamount)-1], &sourcesize, cursor)) //add function indicator
+                if(!addtosource(&((*code)[(*funamount)-1]), &sourcesize, cursor)) //add function indicator
                 {
                     return 0;
                 }
 
                 if(!infunction)                                             //add end of string symbol at end of function array
                 {
-                    if(!addtosource(code[(*funamount)-1], &sourcesize, '\0'))
+                    if(!addtosource(&((*code)[(*funamount)-1]), &sourcesize, '\0'))
                     {
                         return 0;
                     }
@@ -132,8 +134,27 @@ int loadbrainfqfl(char ***const code, const char *const flname, int *const funam
                     {
                         jmp=-2;
                     }
+                    else if((cursor==10)||(cursor==11))//print data bytes for value type
+                    {
+                        jmp=-2;
 
-                    if(!addtosource(code[(*funamount)-1], &sourcesize, cursor))
+                        if(fscanf(sourcefl, "%c", &cursor)==0)
+                        {
+                            printf("[@Error] Corrupted bytecode file.\n");
+                            printf("[@Error] Expected at least another '%d' bytes of code.\n", jmp * (-1) );
+                            return 0;
+                        }
+
+                        if(cursor==0)                                 //if data type is an integer constant print another 4 byte
+                        {
+                            jmp=-6;
+                        }
+
+                        fseek(sourcefl, -2, SEEK_CUR);
+                        fscanf(sourcefl, "%c", &cursor);
+                    }
+
+                    if(!addtosource(&((*code)[(*funamount)-1]), &sourcesize, cursor))
                     {
                         return 0;
                     }
@@ -143,7 +164,7 @@ int loadbrainfqfl(char ***const code, const char *const flname, int *const funam
         }
         else
         {
-            if(!addtosource(code[(*funamount)-1], &sourcesize, cursor))     //add data bytes to function array
+            if(!addtosource(&((*code)[(*funamount)-1]), &sourcesize, cursor))     //add data bytes to function array
             {
                 return 0;
             }
@@ -156,10 +177,11 @@ int loadbrainfqfl(char ***const code, const char *const flname, int *const funam
     {
         printf("[@Error] Corrupted bytecode file.\n");
         printf("[@Error] Expected at least another '%d' bytes of code.\n", jmp * (-1) );
+        return 0;
     }
 
     fclose(sourcefl);                                                       //close file
-    return sourcesize;
+    return bytes;
 }
 
 
