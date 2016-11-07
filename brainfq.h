@@ -37,7 +37,7 @@
 #include <string.h>
 #include <stdbool.h>
 
-extern const char cmd_array[9];         //all available commands
+extern const char cmd_array[];         //all available commands
 
 
 int loadsourcefl(char **const read, const char *const flname);                          //loads a source file
@@ -56,6 +56,7 @@ uint8_t repaeting(const char *const code, int *const pos, const int codesize, co
 bool newbyte(uint8_t **const memory, int *const cmdsize);                                       //generates a new byte in a string
 bool newquadbyte(uint8_t **const memory, int *const cmdsize);                                   //generates four new bytes in a string
 int getquadbyte(const uint8_t *const code, int *const pos);                                     //retrieves four bytes from a string and merges them into an integer
+int retrieve_constant(const char *const code, int *const pos);                               //retrieves a constant integer value from a string in the source file
 
 #endif // BRAINFQ_H_INCLUDED
 
@@ -73,19 +74,24 @@ int getquadbyte(const uint8_t *const code, int *const pos);                     
     +   3   +B  decrement current value                                     //*
 
     //additional brainfuck commands//
-    $   get current value                                           //*
-    ;   get current pointer position                                //*
-    :   9   new function                                                //*
-    #   call function                                               //*
-    ?   comment                                                     //*
+    $   12      get current value                                           //*
+    ;   13      get current pointer position                                //*
+    :   9       new function                                                //*
+    #   20  +B  call function                                               //*
+    ?           comment                                                     //*
 
-    =   set current value                                           //*
-    %   set pointer                                                 //*
-    &   and                                                         //*
-    |   or                                                          //*
-    !   not                                                         //*
-    ~   move                                                        //*
-    _   ('+' & shift) add current value and next value              //*
-    *   ('-' & shift) subtract next value from current value        //*
+    =   10  +B  set current value                                           //*
+    %   11  +B  set pointer                                                 //*
+    &   14      and                                                         //*
+    |   15      or                                                          //*
+    !   16      not                                                         //*
+    ~   17      move                                                        //*
+    _   18      ('+' & shift) add current value and next value              //*
+    *   19      ('-' & shift) subtract next value from current value        //*
+
+    //value types//
+    0   Integer constant
+    1   current value
+    2   current pointer position
 
 */
