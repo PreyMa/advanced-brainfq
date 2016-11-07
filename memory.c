@@ -1,25 +1,24 @@
 #include "brainfq.h"
 
-static int memsize=0;
+static int memsize=0;                               //private value containing the current amount of memory cells
 
-int *getelement(const int position)
+int *getmemcell(const int position)
 {
     static int *memory=NULL;
-    int i;
 
-    if(position<0)
+    if(position<0)                                  //trying to call a negative cell pointer
     {
         printf("[@Error] Negative element pointer error.\n");
         return NULL;
     }
 
-    if(position>memsize-1)
+    if(position>memsize-1)                          //if memory cell out of the the current array is reached, new ones will be created
     {
-        memory= (int*) realloc(memory, (position+1) * sizeof(int));
+        memory= (int*) realloc(memory, (position+1) * sizeof(int)); //generate new cells
 
-        if(memory!=NULL)
+        if(memory!=NULL)                            //check for allocation error
         {
-            for(i=memsize; i<=position; i++)
+            for(int i= memsize; i<=position; i++)   //set all new cells to 0
             {
                 memory[i]= 0;
             }
@@ -31,12 +30,12 @@ int *getelement(const int position)
             return NULL;
         }
     }
-    return memory+position;
+    return memory+position;                         //return pointer to the cell
 }
 
 unsigned int getmemsize()
 {
-    return memsize;
+    return memsize;                                 //return the current amount of memory cells
 }
 
 
