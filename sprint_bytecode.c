@@ -4,14 +4,14 @@ void sprint_bytecode(const uint8_t *const *const code, const int funamount)
 {
     int pos=1, temp, curfunction;
 
-    for(curfunction=0; curfunction<funamount; curfunction++)
+    for(curfunction=0; curfunction<funamount; curfunction++)            //iterate through all functions
     {
         printf("[@Debug] Printing function '%d':\n", curfunction);
-        while(code[curfunction][pos]!=9)
+        while(code[curfunction][pos]!=9)                                //iterate through all commands of a function
         {
             printf("[@Debug] %d: %d: ", pos, code[curfunction][pos]);
 
-            switch(code[curfunction][pos])
+            switch(code[curfunction][pos])                              //enter state machine
             {
             case 1:
                 printf(">: ");

@@ -4,12 +4,12 @@ int run(const uint8_t *const *const code, int *const pointerpos, const int curfu
 {
     int pos=1, temp, last_cmd;
 
-    while(code[curfunction][pos]!=9)
+    while(code[curfunction][pos]!=9)                                    //run until the end of the current function is reached
     {
         //printf("%d: %d: ", pos, code[curfunction][pos]);
         last_cmd= code[curfunction][pos];
 
-        switch(code[curfunction][pos])
+        switch(code[curfunction][pos])                                  //enter state machine and execute current command
         {
         case 1:
             //printf(">: ");
@@ -17,7 +17,7 @@ int run(const uint8_t *const *const code, int *const pointerpos, const int curfu
             //printf("%d\n", code[curfunction][pos]);
 
             (*pointerpos)= (*pointerpos)+ (int) code[curfunction][pos];
-            if(getelement(*pointerpos)==NULL)
+            if(getmemcell(*pointerpos)==NULL)
             {
                 return 0;
             }
@@ -29,7 +29,7 @@ int run(const uint8_t *const *const code, int *const pointerpos, const int curfu
             //printf("%d\n", code[curfunction][pos]);
 
             (*pointerpos)= (*pointerpos)- (int) code[curfunction][pos];
-            if(getelement(*pointerpos)==NULL)
+            if(getmemcell(*pointerpos)==NULL)
             {
                 return 0;
             }
@@ -40,11 +40,11 @@ int run(const uint8_t *const *const code, int *const pointerpos, const int curfu
             pos++;
             //printf("%d\n", code[curfunction][pos]);
 
-            if(getelement(*pointerpos)==NULL)
+            if(getmemcell(*pointerpos)==NULL)
             {
                 return 0;
             }
-            (*getelement(*pointerpos))= (*getelement(*pointerpos))+ (int) code[curfunction][pos];
+            (*getmemcell(*pointerpos))= (*getmemcell(*pointerpos))+ (int) code[curfunction][pos];
             break;
 
         case 4:
@@ -52,20 +52,20 @@ int run(const uint8_t *const *const code, int *const pointerpos, const int curfu
             pos++;
             //printf("%d\n", code[curfunction][pos]);
 
-            if(getelement(*pointerpos)==NULL)
+            if(getmemcell(*pointerpos)==NULL)
             {
                 return 0;
             }
-            (*getelement(*pointerpos))= (*getelement(*pointerpos))- (int) code[curfunction][pos];
+            (*getmemcell(*pointerpos))= (*getmemcell(*pointerpos))- (int) code[curfunction][pos];
             break;
 
         case 5:
             temp= getquadbyte(code[curfunction], &pos);
-            if(getelement(*pointerpos)==NULL)
+            if(getmemcell(*pointerpos)==NULL)
             {
                 return 0;
             }
-            if(*(getelement(*pointerpos))==0)
+            if(*(getmemcell(*pointerpos))==0)
             {
                 pos= temp+4;
             }
@@ -75,11 +75,11 @@ int run(const uint8_t *const *const code, int *const pointerpos, const int curfu
 
         case 6:
             temp= getquadbyte(code[curfunction], &pos);
-            if(getelement(*pointerpos)==NULL)
+            if(getmemcell(*pointerpos)==NULL)
             {
                 return 0;
             }
-            if(*(getelement(*pointerpos))!=0)
+            if(*(getmemcell(*pointerpos))!=0)
             {
                 pos= temp+4;
             }
@@ -87,16 +87,16 @@ int run(const uint8_t *const *const code, int *const pointerpos, const int curfu
             break;
 
         case 7:
-            if(getelement(*pointerpos)==NULL)
+            if(getmemcell(*pointerpos)==NULL)
             {
                 return 0;
             }
-            printf("%c", *getelement(*pointerpos));
+            printf("%c", *getmemcell(*pointerpos));
             //printf(".\n");
             break;
 
         case 8:
-            scanf("%c", getelement(*pointerpos));
+            scanf("%c", getmemcell(*pointerpos));
             //printf(",\n");
             break;
 
@@ -106,9 +106,9 @@ int run(const uint8_t *const *const code, int *const pointerpos, const int curfu
             break;
         }
 
-        if(debug)
+        if(debug)                                           //some debug information
         {
-            printf("cmd: %d:%c func: %d pos: %d val: %d\n", pos, cmd_array[last_cmd-1], curfunction, *pointerpos, *getelement(*pointerpos));
+            printf("cmd: %d:%c func: %d pos: %d val: %d\n", pos, cmd_array[last_cmd-1], curfunction, *pointerpos, *getmemcell(*pointerpos));
         }
 
         pos++;
