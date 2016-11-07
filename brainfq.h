@@ -62,9 +62,9 @@
 
     //value types//
 
-    0   Integer constant
-    1   current value
-    2   current pointer position
+        0   +I  Integer constant                                            //*
+    $   1       current value                                               //*
+    ;   2       current pointer address                                     //*
 
 */
 
