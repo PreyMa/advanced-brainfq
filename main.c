@@ -1,6 +1,6 @@
 #include "brainfq.h"
 
-const char cmd_array[9]= {'>','<','+','-','[',']','.',',',':'};
+const char cmd_array[19]= {'>','<','+','-','[',']','.',',',':', '=', '%', '$', ';', '&', '|', '!', '~', '_', '*'};
 
 int main(const int argc, const char *const *const argv)
 {

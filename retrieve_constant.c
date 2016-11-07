@@ -1,6 +1,6 @@
 #include "brainfq.h"
 
-int retrieve_constant(const uint8_t *const code, int *const pos)
+int retrieve_constant(const char *const code, int *const pos)
 {
     char temp[32];
     int i=-1;

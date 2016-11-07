@@ -2,7 +2,7 @@
 
 int parse(uint8_t ***const code, const char *const source, const int sourcesize)
 {
-    int funamount=0, cmdamount=0, *loop_stack=NULL, loop_depth=0;
+    int funamount=0, cmdamount=0, *loop_stack=NULL, loop_depth=0, constvalue;
     bool infunction=false;
 
     *code= NULL;
@@ -16,6 +16,7 @@ int parse(uint8_t ***const code, const char *const source, const int sourcesize)
             if(infunction)                                                                      //if new function is reached
             {
                 funamount++;
+                cmdamount= 0;
 
                 *code= realloc(*code, funamount * sizeof(uint8_t*));                            //generate new function array
 
@@ -53,7 +54,7 @@ int parse(uint8_t ***const code, const char *const source, const int sourcesize)
                 {
 
                 case '>':                                                                       //new pointer operator
-                    if(!newbyte(code[funamount-1], &cmdamount))                                 //add command
+                    if(!newbyte(&((*code)[funamount-1]), &cmdamount))                                 //add command
                     {
                         return 0;
                     }
@@ -173,13 +174,189 @@ int parse(uint8_t ***const code, const char *const source, const int sourcesize)
                     (*code)[funamount-1][cmdamount-1]= 8;
                     break;
 
+                case '=':
+                    if(!newbyte(&((*code)[funamount-1]), &cmdamount))                                 //add command
+                    {
+                        return 0;
+                    }
+                    (*code)[funamount-1][cmdamount-1]= 10;
+
+                    i++;
+
+                    if(!newbyte(&((*code)[funamount-1]), &cmdamount))                                 //add data byte
+                    {
+                        return 0;
+                    }
+
+                    if(source[i] == '$')                                                        //write value type to data byte
+                    {
+                        (*code)[funamount-1][cmdamount-1]= 1;
+                    }
+                    else if(source[i] == ';')
+                    {
+                        (*code)[funamount-1][cmdamount-1]= 2;
+                    }
+                    else
+                    {
+                        (*code)[funamount-1][cmdamount-1]= 0;
+
+                        if(!newquadbyte(&((*code)[funamount-1]), &cmdamount))                   //add data integer
+                        {
+                            return 0;
+                        }
+
+                        i--;
+                        constvalue= retrieve_constant(source, &i);                              //read constant value from source file
+
+                        (*code)[funamount-1][cmdamount-4]= ((uint8_t*)(&constvalue))[0];
+                        (*code)[funamount-1][cmdamount-3]= ((uint8_t*)(&constvalue))[1];
+                        (*code)[funamount-1][cmdamount-2]= ((uint8_t*)(&constvalue))[2];
+                        (*code)[funamount-1][cmdamount-1]= ((uint8_t*)(&constvalue))[3];
+                    }
+                    break;
+
+                case '%':
+                    if(!newbyte(&((*code)[funamount-1]), &cmdamount))                                 //add command
+                    {
+                        return 0;
+                    }
+                    (*code)[funamount-1][cmdamount-1]= 11;
+
+                    i++;
+
+                    if(!newbyte(&((*code)[funamount-1]), &cmdamount))                                 //add data byte
+                    {
+                        return 0;
+                    }
+
+                    if(source[i] == '$')                                                        //write value type to data byte
+                    {
+                        (*code)[funamount-1][cmdamount-1]= 1;
+                    }
+                    else if(source[i] == ';')
+                    {
+                        (*code)[funamount-1][cmdamount-1]= 2;
+                    }
+                    else
+                    {
+                        (*code)[funamount-1][cmdamount-1]= 0;
+
+                        if(!newquadbyte(&((*code)[funamount-1]), &cmdamount))                   //add data integer
+                        {
+                            return 0;
+                        }
+
+                        i--;
+                        constvalue= retrieve_constant(source, &i);                              //read constant value from source file
+
+                        (*code)[funamount-1][cmdamount-4]= ((uint8_t*)(&constvalue))[0];
+                        (*code)[funamount-1][cmdamount-3]= ((uint8_t*)(&constvalue))[1];
+                        (*code)[funamount-1][cmdamount-2]= ((uint8_t*)(&constvalue))[2];
+                        (*code)[funamount-1][cmdamount-1]= ((uint8_t*)(&constvalue))[3];
+                    }
+                    break;
+
+                case '$':                                                                       //ignore standalone value indicator
+                    break;
+
+                case ';':                                                                       //ignore standalone value indicator
+                    break;
+
+                case '&':
+                    if(!newbyte(&((*code)[funamount-1]), &cmdamount))
+                    {
+                        return 0;
+                    }
+                    (*code)[funamount-1][cmdamount-1]= 14;
+                    break;
+
+                case '|':
+                    if(!newbyte(&((*code)[funamount-1]), &cmdamount))
+                    {
+                        return 0;
+                    }
+                    (*code)[funamount-1][cmdamount-1]= 15;
+                    break;
+
+                case '!':
+                    if(!newbyte(&((*code)[funamount-1]), &cmdamount))
+                    {
+                        return 0;
+                    }
+                    (*code)[funamount-1][cmdamount-1]= 16;
+                    break;
+
+                case '~':
+                    if(!newbyte(&((*code)[funamount-1]), &cmdamount))
+                    {
+                        return 0;
+                    }
+                    (*code)[funamount-1][cmdamount-1]= 17;
+                    break;
+
+                case '_':
+                    if(!newbyte(&((*code)[funamount-1]), &cmdamount))
+                    {
+                        return 0;
+                    }
+                    (*code)[funamount-1][cmdamount-1]= 18;
+                    break;
+
+                case '*':
+                    if(!newbyte(&((*code)[funamount-1]), &cmdamount))
+                    {
+                        return 0;
+                    }
+                    (*code)[funamount-1][cmdamount-1]= 19;
+                    break;
+
+                case '#':
+                    if(!newbyte(&((*code)[funamount-1]), &cmdamount))                                 //add command
+                    {
+                        return 0;
+                    }
+                    (*code)[funamount-1][cmdamount-1]= 20;
+
+                    i++;
+
+                    if(!newbyte(&((*code)[funamount-1]), &cmdamount))                                 //add data byte
+                    {
+                        return 0;
+                    }
+
+                    if(source[i] == '$')                                                        //write value type to data byte
+                    {
+                        (*code)[funamount-1][cmdamount-1]= 1;
+                    }
+                    else if(source[i] == ';')
+                    {
+                        (*code)[funamount-1][cmdamount-1]= 2;
+                    }
+                    else
+                    {
+                        (*code)[funamount-1][cmdamount-1]= 0;
+
+                        if(!newquadbyte(&((*code)[funamount-1]), &cmdamount))                   //add data integer
+                        {
+                            return 0;
+                        }
+
+                        i--;
+                        constvalue= retrieve_constant(source, &i);                              //read constant value from source file
+
+                        (*code)[funamount-1][cmdamount-4]= ((uint8_t*)(&constvalue))[0];
+                        (*code)[funamount-1][cmdamount-3]= ((uint8_t*)(&constvalue))[1];
+                        (*code)[funamount-1][cmdamount-2]= ((uint8_t*)(&constvalue))[2];
+                        (*code)[funamount-1][cmdamount-1]= ((uint8_t*)(&constvalue))[3];
+                    }
+                    break;
+
                 default:                                                                        //unknown state machine value
                     printf("[@Error] Character out of context: '%c'.\n", source[i]);
                     break;
                 }
             }
         }
-
     }
 
     return funamount;

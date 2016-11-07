@@ -26,9 +26,18 @@ int save_bytecode(const char *const flname, const uint8_t *const *const code, co
                 {
                     jmp=-5;
                 }
-                if((code[curfunction][pos]>=1)&&(code[curfunction][pos]<=4))//print out one data byte
+                else if((code[curfunction][pos]>=1)&&(code[curfunction][pos]<=4))//print out one data byte
                 {
                     jmp=-2;
+                }
+                else if((code[curfunction][pos]==10)||(code[curfunction][pos]==11))//print data bytes for value type
+                {
+                    jmp=-2;
+
+                    if(code[curfunction][pos+1]==0)                                 //if data type is an integer constant print another 4 byte
+                    {
+                        jmp=-6;
+                    }
                 }
             }
 
