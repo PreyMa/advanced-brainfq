@@ -8,7 +8,7 @@
 
  /* Version:          1.2                                                                                   */
  /* Additional files: main.c, load.c, memory.c, parse.c, parsing_functions.c, run.c, save_bytecode.c,       */
- /*                   sprint_bytecode.c                                                                     */
+ /*                   sprint_bytecode.c, retrieve_constant.c                                                */
 
  /* Disclaimer:       "This software is provided as it is and the author does not take any responsibility   */
  /*                   for any kind of damage caused by the usage of this code. Copying, sharing and the     */
@@ -27,6 +27,46 @@
  /*                   by a '?' infront. This declared everything until the next '?' or '\n' to be a comment.*/
  /*                   For further information how to use advanced brainfq feel free to check my GitHub page */
  /*                   out.                                                                                  */
+
+ /*                                         ADVANCED BRAINFQ                                                */
+ /*
+    //standard brainfuck commands//
+
+    ascii - cmd id - additional bytes - name - implemented? (//* means yes)
+
+    .   7       print                                                       //*
+    ,   8       get                                                         //*
+    [   5   +I  loop begin if current value is not 0                        //*
+    ]   6   +I  loop end -> go back to begin if current value is not 0      //*
+    <   2   +B  decrement pointer                                           //*
+    >   1   +B  increment pointer                                           //*
+    -   4   +B  increment current value                                     //*
+    +   3   +B  decrement current value                                     //*
+
+    //additional brainfuck commands//
+
+    $   12      get current value                                           //*
+    ;   13      get current pointer position                                //*
+    :   9       new function                                                //*
+    #   20  +B  call function                                               //*
+    ?           comment                                                     //*
+
+    =   10  +B  set current value                                           //*
+    %   11  +B  set pointer                                                 //*
+    &   14      and with next value                                         //*
+    |   15      or with next value                                          //*
+    !   16      not                                                         //*
+    ~   17      move to cell address specified in the next cell             //*
+    _   18      ('+' & shift) add current value and next value              //*
+    *   19      ('-' & shift) subtract next value from current value        //*
+
+    //value types//
+
+    0   Integer constant
+    1   current value
+    2   current pointer position
+
+*/
 
 #ifndef BRAINFQ_H_INCLUDED
 #define BRAINFQ_H_INCLUDED
@@ -60,38 +100,3 @@ int retrieve_constant(const char *const code, int *const pos);                  
 
 #endif // BRAINFQ_H_INCLUDED
 
-
-/*
-    //standard brainfuck commands//
-
-    .   7       print                                                       //*
-    ,   8       get                                                         //*
-    [   5   +I  loop begin if current value is not 0                        //*
-    ]   6   +I  loop end -> go back to begin if current value is not 0      //*
-    <   2   +B  decrement pointer                                           //*
-    >   1   +B  increment pointer                                           //*
-    -   4   +B  increment current value                                     //*
-    +   3   +B  decrement current value                                     //*
-
-    //additional brainfuck commands//
-    $   12      get current value                                           //*
-    ;   13      get current pointer position                                //*
-    :   9       new function                                                //*
-    #   20  +B  call function                                               //*
-    ?           comment                                                     //*
-
-    =   10  +B  set current value                                           //*
-    %   11  +B  set pointer                                                 //*
-    &   14      and                                                         //*
-    |   15      or                                                          //*
-    !   16      not                                                         //*
-    ~   17      move                                                        //*
-    _   18      ('+' & shift) add current value and next value              //*
-    *   19      ('-' & shift) subtract next value from current value        //*
-
-    //value types//
-    0   Integer constant
-    1   current value
-    2   current pointer position
-
-*/
