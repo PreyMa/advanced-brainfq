@@ -57,14 +57,14 @@
     |   15      or with next value                                          //*
     !   16      not                                                         //*
     ~   17      move to cell address specified in the next cell             //*
-    _   18      ('+' & shift) add current value and next value              //*
-    *   19      ('-' & shift) subtract next value from current value        //*
+    *   19      ('+' & shift) add current value and next value              //*
+    _   18      ('-' & shift) subtract next value from current value        //*
 
     //value types//
 
-        0   +I  Integer constant                                            //*
-    $   1       current value                                               //*
-    ;   2       current pointer address                                     //*
+    0   Integer constant
+    1   current value
+    2   current pointer position
 
 */
 

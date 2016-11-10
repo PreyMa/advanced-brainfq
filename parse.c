@@ -283,7 +283,7 @@ int parse(uint8_t ***const code, const char *const source, const int sourcesize)
                     (*code)[funamount-1][cmdamount-1]= 17;
                     break;
 
-                case '_':
+                case '*':
                     if(!newbyte(&((*code)[funamount-1]), &cmdamount))
                     {
                         return 0;
@@ -291,7 +291,7 @@ int parse(uint8_t ***const code, const char *const source, const int sourcesize)
                     (*code)[funamount-1][cmdamount-1]= 18;
                     break;
 
-                case '*':
+                case '_':
                     if(!newbyte(&((*code)[funamount-1]), &cmdamount))
                     {
                         return 0;
