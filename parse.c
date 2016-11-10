@@ -133,10 +133,8 @@ int parse(uint8_t ***const code, const char *const source, const int sourcesize)
                     break;
 
                 case ']':                                                                       //end of loop
-                    (*code)[funamount-1][loop_stack[loop_depth-1]+1]= ((uint8_t*)&cmdamount)[0];//save end position of loop to begin of loop command
-                    (*code)[funamount-1][loop_stack[loop_depth-1]+2]= ((uint8_t*)&cmdamount)[1];
-                    (*code)[funamount-1][loop_stack[loop_depth-1]+3]= ((uint8_t*)&cmdamount)[2];
-                    (*code)[funamount-1][loop_stack[loop_depth-1]+4]= ((uint8_t*)&cmdamount)[3];
+
+                    memcpy((*code)[funamount-1]+loop_stack[loop_depth-1]+1,&cmdamount,4);       //save end position of loop to begin of loop command
 
                     if(!newbyte(&((*code)[funamount-1]), &cmdamount))                           //add command byte
                     {
@@ -149,10 +147,7 @@ int parse(uint8_t ***const code, const char *const source, const int sourcesize)
                         return 0;
                     }
 
-                    (*code)[funamount-1][cmdamount-4]= ((uint8_t*)(loop_stack+loop_depth-1))[0];//save begin position of loop to end of loop command
-                    (*code)[funamount-1][cmdamount-3]= ((uint8_t*)(loop_stack+loop_depth-1))[1];
-                    (*code)[funamount-1][cmdamount-2]= ((uint8_t*)(loop_stack+loop_depth-1))[2];
-                    (*code)[funamount-1][cmdamount-1]= ((uint8_t*)(loop_stack+loop_depth-1))[3];
+                    memcpy((*code)[funamount-1]+cmdamount-4,loop_stack+loop_depth-1,4);         //save begin position of loop to end of loop command
 
                     loop_depth--;                                                               //pop stack
                     loop_stack= (int*) realloc(loop_stack, loop_depth * sizeof(int));
@@ -208,10 +203,7 @@ int parse(uint8_t ***const code, const char *const source, const int sourcesize)
                         i--;
                         constvalue= retrieve_constant(source, &i);                              //read constant value from source file
 
-                        (*code)[funamount-1][cmdamount-4]= ((uint8_t*)(&constvalue))[0];
-                        (*code)[funamount-1][cmdamount-3]= ((uint8_t*)(&constvalue))[1];
-                        (*code)[funamount-1][cmdamount-2]= ((uint8_t*)(&constvalue))[2];
-                        (*code)[funamount-1][cmdamount-1]= ((uint8_t*)(&constvalue))[3];
+                        memcpy((*code)[funamount-1]+cmdamount-4,&constvalue,4);
                     }
                     break;
 
@@ -249,10 +241,7 @@ int parse(uint8_t ***const code, const char *const source, const int sourcesize)
                         i--;
                         constvalue= retrieve_constant(source, &i);                              //read constant value from source file
 
-                        (*code)[funamount-1][cmdamount-4]= ((uint8_t*)(&constvalue))[0];
-                        (*code)[funamount-1][cmdamount-3]= ((uint8_t*)(&constvalue))[1];
-                        (*code)[funamount-1][cmdamount-2]= ((uint8_t*)(&constvalue))[2];
-                        (*code)[funamount-1][cmdamount-1]= ((uint8_t*)(&constvalue))[3];
+                        memcpy((*code)[funamount-1]+cmdamount-4,&constvalue,4);
                     }
                     break;
 
@@ -344,10 +333,7 @@ int parse(uint8_t ***const code, const char *const source, const int sourcesize)
                         i--;
                         constvalue= retrieve_constant(source, &i);                              //read constant value from source file
 
-                        (*code)[funamount-1][cmdamount-4]= ((uint8_t*)(&constvalue))[0];
-                        (*code)[funamount-1][cmdamount-3]= ((uint8_t*)(&constvalue))[1];
-                        (*code)[funamount-1][cmdamount-2]= ((uint8_t*)(&constvalue))[2];
-                        (*code)[funamount-1][cmdamount-1]= ((uint8_t*)(&constvalue))[3];
+                        memcpy((*code)[funamount-1]+cmdamount-4,&constvalue,4);
                     }
                     break;
 

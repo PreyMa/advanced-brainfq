@@ -39,26 +39,12 @@ void sprint_bytecode(const uint8_t *const *const code, const int funamount)
                 break;
 
             case 5:
-                pos++;
-                ((uint8_t*)&temp)[0]= code[curfunction][pos];
-                pos++;
-                ((uint8_t*)&temp)[1]= code[curfunction][pos];
-                pos++;
-                ((uint8_t*)&temp)[2]= code[curfunction][pos];
-                pos++;
-                ((uint8_t*)&temp)[3]= code[curfunction][pos];
+                temp= getquadbyte(code[curfunction], &pos);
                 printf("[: %d\n", temp);
                 break;
 
             case 6:
-                pos++;
-                ((uint8_t*)&temp)[0]= code[curfunction][pos];
-                pos++;
-                ((uint8_t*)&temp)[1]= code[curfunction][pos];
-                pos++;
-                ((uint8_t*)&temp)[2]= code[curfunction][pos];
-                pos++;
-                ((uint8_t*)&temp)[3]= code[curfunction][pos];
+                temp= getquadbyte(code[curfunction], &pos);
                 printf("]: %d\n", temp);
                 break;
 
@@ -76,14 +62,7 @@ void sprint_bytecode(const uint8_t *const *const code, const int funamount)
 
                 if(code[curfunction][pos]==0)
                 {
-                    pos++;
-                    ((uint8_t*)&temp)[0]= code[curfunction][pos];
-                    pos++;
-                    ((uint8_t*)&temp)[1]= code[curfunction][pos];
-                    pos++;
-                    ((uint8_t*)&temp)[2]= code[curfunction][pos];
-                    pos++;
-                    ((uint8_t*)&temp)[3]= code[curfunction][pos];
+                    temp= getquadbyte(code[curfunction], &pos);
                     printf(": %d", temp);
                 }
 
@@ -96,14 +75,7 @@ void sprint_bytecode(const uint8_t *const *const code, const int funamount)
 
                 if(code[curfunction][pos]==0)
                 {
-                    pos++;
-                    ((uint8_t*)&temp)[0]= code[curfunction][pos];
-                    pos++;
-                    ((uint8_t*)&temp)[1]= code[curfunction][pos];
-                    pos++;
-                    ((uint8_t*)&temp)[2]= code[curfunction][pos];
-                    pos++;
-                    ((uint8_t*)&temp)[3]= code[curfunction][pos];
+                    temp= getquadbyte(code[curfunction], &pos);
                     printf(": %d", temp);
                 }
 
