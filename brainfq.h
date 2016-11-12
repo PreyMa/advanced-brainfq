@@ -46,7 +46,7 @@
     //additional brainfuck commands//
 
     $           get current value                                           //*
-    ;   13      get current pointer position                                //*
+    ;           get current pointer position                                //*
     :   9       new function                                                //*
     #   20  +B  call function                                               //*
     ?           comment                                                     //*
